@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Alice",
+    "age": 30,
+    "email": "alice@example.com",
+    "isMember": true
+  },
+  {
+    "name": "Bob",
+    "age": 28,
+    "email": "bob@example.com",
+    "isMember": false
+  }
+]
