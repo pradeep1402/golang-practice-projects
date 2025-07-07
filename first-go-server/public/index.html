@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infographic: The Blueprint for Maintainable Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8fafc;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 320px;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+      .flowchart-step {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 1rem 1.5rem;
+        border: 2px solid #fc913a;
+        background-color: white;
+        color: #1e293b;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        min-height: 80px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+      }
+      .flowchart-arrow {
+        position: relative;
+        color: #fc913a;
+        font-size: 2.5rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(90deg);
+      }
+      @media (min-width: 768px) {
+        .flowchart-arrow {
+          transform: rotate(0deg);
+        }
+      }
+      .tree ul {
+        padding-left: 1.5rem;
+        position: relative;
+      }
+      .tree li {
+        list-style: none;
+        padding-top: 0.5rem;
+        position: relative;
+      }
+      .tree li::before,
+      .tree li::after {
+        content: "";
+        position: absolute;
+        left: -1rem;
+        border-color: #fc913a;
+      }
+      .tree li::before {
+        border-top: 2px solid #fc913a;
+        top: 1.25rem;
+        width: 1rem;
+        height: 0;
+      }
+      .tree li::after {
+        border-left: 2px solid #fc913a;
+        height: 100%;
+        width: 0px;
+        top: 0.25rem;
+      }
+      .tree ul > li:last-child::after {
+        height: 1rem;
+      }
+      .tree-item {
+        display: inline-block;
+        background-color: #e1f5c4;
+        color: #3f6212;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body class="text-slate-700">
+    <!-- 
+    CONFIRMATION: NEITHER MERMAID JS NOR SVG WERE USED IN THIS DOCUMENT.
+    COLOR PALETTE USED: Energetic & Playful (#FF4E50, #FC913A, #F9D423, #E1F5C4)
+    -->
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+      <header class="text-center my-12 md:my-16">
+        <h1
+          class="text-4xl md:text-6xl font-black text-slate-800 leading-tight"
+        >
+          The Blueprint for Building Better Software
+        </h1>
+        <p class="mt-4 max-w-3xl mx-auto text-lg md:text-xl text-slate-600">
+          Effective project structure isn't just about tidy folders. It's the
+          foundation for maintainable, testable, and scalable code that stands
+          the test of time.
+        </p>
+      </header>
+
+      <main class="space-y-16 md:space-y-24">
+        <section id="anatomy" class="bg-white rounded-xl shadow-lg p-6 md:p-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="prose max-w-none">
+              <h2 class="text-3xl font-bold text-slate-800">
+                Anatomy of a Well-Structured Project
+              </h2>
+              <p class="text-lg">
+                A modular project structure separates distinct concerns into
+                dedicated directories. This clean organization makes code easier
+                to find, understand, and maintain, forming the basis for
+                effective collaboration and future growth.
+              </p>
+              <ul class="text-base list-disc pl-5 space-y-2">
+                <li>
+                  <strong class="text-[#FF4E50]">src/:</strong> Core application
+                  logic, the heart of the program.
+                </li>
+                <li>
+                  <strong class="text-[#FC913A]">tests/:</strong> All automated
+                  tests, ensuring code quality and reliability.
+                </li>
+                <li>
+                  <strong class="text-[#F9D423]">docs/:</strong> Project
+                  documentation, from READMEs to API specifications.
+                </li>
+                <li>
+                  <strong class="text-[#b4c48d]">build/:</strong> Compiled files
+                  and other build artifacts, kept separate from source code.
+                </li>
+                <li>
+                  <strong class="text-[#9ca3af]">config/:</strong> Configuration
+                  files for tools and environments.
+                </li>
+              </ul>
+            </div>
+            <div>
+              <div class="chart-container">
+                <canvas id="projectAnatomyChart"></canvas>
+              </div>
+              <p class="text-center text-sm text-slate-500 mt-2">
+                A conceptual breakdown showing the separation of concerns. The
+                majority of effort lies in source code and testing.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section id="testing-divide">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">
+              The Testing Divide: Unit vs. Integration
+            </h2>
+            <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-600">
+              Not all tests are created equal. Separating fast, isolated unit
+              tests from slower, comprehensive integration tests is key to an
+              efficient and effective quality assurance strategy.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+              <h3 class="text-2xl font-bold text-slate-800">⚡ Unit Tests</h3>
+              <p class="mt-2 mb-4">
+                These tests verify the smallest pieces of code (functions or
+                methods) in complete isolation. They are incredibly fast and
+                pinpoint the exact location of bugs in your logic.
+              </p>
+              <div class="chart-container h-64 max-h-[300px]">
+                <canvas id="unitVsIntegrationSpeedChart"></canvas>
+              </div>
+              <p class="text-center text-sm text-slate-500 mt-2">
+                Unit tests execute in milliseconds, providing immediate feedback
+                during development.
+              </p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+              <h3 class="text-2xl font-bold text-slate-800">
+                🔗 Integration Tests
+              </h3>
+              <p class="mt-2 mb-4">
+                These tests verify that different modules of your application
+                work together correctly. They are slower but crucial for finding
+                bugs in component interactions and data flows.
+              </p>
+              <div class="chart-container h-64 max-h-[300px]">
+                <canvas id="unitVsIntegrationComplexityChart"></canvas>
+              </div>
+              <p class="text-center text-sm text-slate-500 mt-2">
+                Integration tests are more complex, involving real databases,
+                networks, and file systems.
+              </p>
+            </div>
+          </div>
+          <div class="mt-12 bg-slate-50 rounded-xl p-6 md:p-8 border">
+            <h3 class="text-2xl font-bold text-slate-800 text-center mb-6">
+              A Typical CI/CD Testing Workflow
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+              <div class="flowchart-step">Code Commit</div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-step bg-[#E1F5C4] border-[#a5b97f]">
+                Run Fast Unit Tests
+              </div>
+              <div class="flowchart-arrow">→</div>
+              <div class="flowchart-step">Run Slower Integration Tests</div>
+            </div>
+            <p class="text-center text-sm text-slate-500 mt-4">
+              This tiered approach provides rapid feedback while ensuring
+              comprehensive validation before deployment, optimizing developer
+              time and resources.
+            </p>
+          </div>
+        </section>
+
+        <section id="fibonacci-case-study">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">
+              Case Study: Structuring a Fibonacci Program
+            </h2>
+            <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-600">
+              Even a "simple" program benefits from a robust structure. Applying
+              these principles to a Fibonacci calculator creates a clean,
+              testable, and extensible foundation.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+              <h3 class="text-2xl font-bold text-slate-800 mb-4">
+                Recommended Directory Structure
+              </h3>
+              <div class="tree text-lg">
+                <ul>
+                  <li>
+                    <span class="tree-item bg-slate-200 text-slate-700"
+                      >fibonacci-project/</span
+                    >
+                    <ul>
+                      <li>
+                        <span class="tree-item">src/</span>
+                        <ul>
+                          <li>
+                            <span class="tree-item">fib_iterative.py</span>
+                          </li>
+                          <li>
+                            <span class="tree-item">fib_recursive.py</span>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <span class="tree-item">tests/</span>
+                        <ul>
+                          <li><span class="tree-item">unit/</span></li>
+                          <li><span class="tree-item">integration/</span></li>
+                        </ul>
+                      </li>
+                      <li><span class="tree-item">README.md</span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <p class="text-sm text-slate-500 mt-4">
+                A clear hierarchy separates source code from tests, with
+                different Fibonacci implementations modularized for independent
+                testing and maintenance.
+              </p>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+              <h3 class="text-2xl font-bold text-slate-800 mb-4">
+                Comparing Fibonacci Implementations
+              </h3>
+              <p class="mb-4">
+                Different algorithmic approaches come with trade-offs in
+                performance and conceptual complexity. A modular structure makes
+                it easy to compare and test them.
+              </p>
+              <div class="chart-container h-72 max-h-[350px]">
+                <canvas id="fibonacciComplexityChart"></canvas>
+              </div>
+              <p class="text-center text-sm text-slate-500 mt-2">
+                A conceptual comparison of implementation complexity and typical
+                performance characteristics.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="best-practices"
+          class="bg-white rounded-xl shadow-lg p-6 md:p-10"
+        >
+          <div class="text-center mb-10">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">
+              The Virtuous Cycle of Quality
+            </h2>
+            <p class="mt-3 max-w-2xl mx-auto text-lg text-slate-600">
+              Good practices reinforce each other, creating a development
+              lifecycle that is efficient, scalable, and produces high-quality
+              software.
+            </p>
+          </div>
+          <div class="flex flex-wrap justify-center items-center gap-8">
+            <div class="text-center p-4 rounded-lg bg-slate-50 border w-48">
+              <div class="text-4xl mb-2">📦</div>
+              <h4 class="font-bold text-lg text-[#FF4E50]">Modular Design</h4>
+              <p class="text-sm">Isolates functionality.</p>
+            </div>
+            <div class="text-2xl font-bold text-[#FC913A]">→</div>
+            <div class="text-center p-4 rounded-lg bg-slate-50 border w-48">
+              <div class="text-4xl mb-2">🧪</div>
+              <h4 class="font-bold text-lg text-[#FC913A]">Easy Testability</h4>
+              <p class="text-sm">Enables reliable tests.</p>
+            </div>
+            <div class="text-2xl font-bold text-[#F9D423]">→</div>
+            <div class="text-center p-4 rounded-lg bg-slate-50 border w-48">
+              <div class="text-4xl mb-2">🔧</div>
+              <h4 class="font-bold text-lg text-[#F9D423]">
+                Simple Maintenance
+              </h4>
+              <p class="text-sm">Reduces bugs & effort.</p>
+            </div>
+            <div class="text-2xl font-bold text-[#E1F5C4]">→</div>
+            <div class="text-center p-4 rounded-lg bg-slate-50 border w-48">
+              <div class="text-4xl mb-2">🚀</div>
+              <h4 class="font-bold text-lg text-[#9cb178]">
+                Greater Scalability
+              </h4>
+              <p class="text-sm">Adapts to future needs.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="text-center mt-16 md:mt-24 py-6 border-t">
+        <p class="text-slate-500">
+          Infographic generated based on research in project structuring and
+          software engineering best practices.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      const CHART_COLORS = {
+        red: "#FF4E50",
+        orange: "#FC913A",
+        yellow: "#F9D423",
+        lime: "#E1F5C4",
+        slate: "#64748b",
+      };
+
+      function wrapLabel(label, maxWidth = 16) {
+        if (label.length <= maxWidth) {
+          return label;
+        }
+        const words = label.split(" ");
+        const lines = [];
+        let currentLine = "";
+        for (const word of words) {
+          if ((currentLine + " " + word).trim().length > maxWidth) {
+            lines.push(currentLine.trim());
+            currentLine = word;
+          } else {
+            currentLine = (currentLine + " " + word).trim();
+          }
+        }
+        if (currentLine) {
+          lines.push(currentLine.trim());
+        }
+        return lines;
+      }
+
+      const defaultChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false,
+          },
+          tooltip: {
+            enabled: true,
+            backgroundColor: "#1e293b",
+            titleFont: { size: 14, weight: "bold" },
+            bodyFont: { size: 12 },
+            padding: 12,
+            cornerRadius: 4,
+            callbacks: {
+              title: function (tooltipItems) {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                  return label.join(" ");
+                } else {
+                  return label;
+                }
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            ticks: { color: CHART_COLORS.slate },
+            grid: { display: false },
+            border: { color: CHART_COLORS.slate },
+          },
+          y: {
+            ticks: { color: CHART_COLORS.slate },
+            grid: { color: "#e2e8f0" },
+            border: { display: false },
+          },
+        },
+      };
+
+      const projectAnatomyChartCtx = document.getElementById(
+        "projectAnatomyChart"
+      );
+      if (projectAnatomyChartCtx) {
+        new Chart(projectAnatomyChartCtx, {
+          type: "doughnut",
+          data: {
+            labels: [
+              "Source Code (src)",
+              "Tests (tests)",
+              "Documentation (docs)",
+              "Build Artifacts",
+              "Configuration",
+            ],
+            datasets: [
+              {
+                label: "Project Composition",
+                data: [50, 30, 10, 5, 5],
+                backgroundColor: [
+                  CHART_COLORS.red,
+                  CHART_COLORS.orange,
+                  CHART_COLORS.yellow,
+                  CHART_COLORS.lime,
+                  "#e2e8f0",
+                ],
+                borderColor: "#f8fafc",
+                borderWidth: 4,
+                hoverOffset: 8,
+              },
+            ],
+          },
+          options: {
+            ...defaultChartOptions,
+            plugins: {
+              ...defaultChartOptions.plugins,
+              legend: {
+                display: true,
+                position: "bottom",
+                labels: {
+                  color: CHART_COLORS.slate,
+                  boxWidth: 15,
+                  padding: 15,
+                },
+              },
+            },
+            scales: { x: { display: false }, y: { display: false } },
+          },
+        });
+      }
+
+      const unitVsIntegrationSpeedChartCtx = document.getElementById(
+        "unitVsIntegrationSpeedChart"
+      );
+      if (unitVsIntegrationSpeedChartCtx) {
+        new Chart(unitVsIntegrationSpeedChartCtx, {
+          type: "bar",
+          data: {
+            labels: ["Unit Test", "Integration Test"],
+            datasets: [
+              {
+                label: "Execution Time (ms)",
+                data: [50, 5000],
+                backgroundColor: [CHART_COLORS.red, CHART_COLORS.orange],
+                borderRadius: 4,
+                barPercentage: 0.6,
+              },
+            ],
+          },
+          options: {
+            ...defaultChartOptions,
+            indexAxis: "y",
+            scales: {
+              x: {
+                ...defaultChartOptions.scales.x,
+                type: "logarithmic",
+                title: {
+                  display: true,
+                  text: "Time in Milliseconds (Log Scale)",
+                  color: CHART_COLORS.slate,
+                },
+              },
+              y: { ...defaultChartOptions.scales.y, grid: { display: false } },
+            },
+          },
+        });
+      }
+
+      const unitVsIntegrationComplexityChartCtx = document.getElementById(
+        "unitVsIntegrationComplexityChart"
+      );
+      if (unitVsIntegrationComplexityChartCtx) {
+        new Chart(unitVsIntegrationComplexityChartCtx, {
+          type: "bar",
+          data: {
+            labels: ["Unit Test", "Integration Test"],
+            datasets: [
+              {
+                label: "Relative Setup Complexity",
+                data: [2, 8],
+                backgroundColor: [CHART_COLORS.red, CHART_COLORS.orange],
+                borderRadius: 4,
+                barPercentage: 0.6,
+              },
+            ],
+          },
+          options: {
+            ...defaultChartOptions,
+            indexAxis: "y",
+            scales: {
+              x: {
+                ...defaultChartOptions.scales.x,
+                title: {
+                  display: true,
+                  text: "Relative Complexity Score",
+                  color: CHART_COLORS.slate,
+                },
+              },
+              y: { ...defaultChartOptions.scales.y, grid: { display: false } },
+            },
+          },
+        });
+      }
+
+      const fibonacciComplexityChartCtx = document.getElementById(
+        "fibonacciComplexityChart"
+      );
+      if (fibonacciComplexityChartCtx) {
+        new Chart(fibonacciComplexityChartCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              wrapLabel("Iterative Approach"),
+              wrapLabel("Recursive Approach"),
+              wrapLabel("Dynamic Programming (Memoization)"),
+            ],
+            datasets: [
+              {
+                label: "Conceptual Complexity",
+                data: [3, 5, 7],
+                backgroundColor: CHART_COLORS.red,
+                stack: "Stack 0",
+              },
+              {
+                label: "Performance Efficiency",
+                data: [8, 2, 9],
+                backgroundColor: CHART_COLORS.orange,
+                stack: "Stack 1",
+              },
+            ],
+          },
+          options: {
+            ...defaultChartOptions,
+            plugins: {
+              ...defaultChartOptions.plugins,
+              legend: {
+                display: true,
+                position: "bottom",
+                labels: {
+                  color: CHART_COLORS.slate,
+                },
+              },
+              tooltip: {
+                ...defaultChartOptions.plugins.tooltip,
+                mode: "index",
+                intersect: false,
+              },
+            },
+            scales: {
+              x: {
+                ...defaultChartOptions.scales.x,
+                stacked: true,
+                ticks: {
+                  ...defaultChartOptions.scales.x.ticks,
+                  font: { size: 10 },
+                },
+              },
+              y: {
+                ...defaultChartOptions.scales.y,
+                stacked: true,
+                title: {
+                  display: true,
+                  text: "Relative Score (out of 10)",
+                  color: CHART_COLORS.slate,
+                },
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>
