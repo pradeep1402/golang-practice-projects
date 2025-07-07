@@ -5,11 +5,19 @@ import (
 	"os"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: go run main.go [name]")
-		return
+func greet(name string) string {
+	if name == "" {
+		return "Usage: go run main.go [name]"
 	}
 
-	fmt.Printf("Hello, %s! Welcome to Go", os.Args[1])
+	return "Hello, " + name + "! Welcome to Go"
+}
+
+func main() {
+	name := ""
+	if len(os.Args) > 1 {
+		name = os.Args[1]
+	}
+
+	fmt.Println(greet(name))
 }
