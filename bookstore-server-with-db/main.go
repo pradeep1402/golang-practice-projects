@@ -4,7 +4,6 @@ import (
 	"context"
 	"gin/app"
 	"gin/db"
-	"gin/handlers"
 	"log"
 	"os"
 
@@ -24,8 +23,7 @@ func main() {
 		log.Fatal("Error while connecting to db")
 	}
 	defer dbPool.Close()
-	bookHandler := handlers.CreateBookHandler(dbPool)
 
-	server := app.SetupRouter(bookHandler)
+	server := app.SetupRouter(dbPool)
 	server.Run(":8080")
 }

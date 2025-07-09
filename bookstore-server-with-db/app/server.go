@@ -4,15 +4,14 @@ import (
 	"gin/handlers"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func SetupRouter(handlers *handlers.BookHandler) *gin.Engine {
+func SetupRouter(pool *pgxpool.Pool) *gin.Engine {
+	handler := handlers.CreateBookHandler(pool)
 	router := gin.Default()
 	books := router.Group("/books")
-	books.GET("/", handlers.GetBooks)
-	// books.POST("/", handlers.HandleAddBook)
-	books.GET("/:id", handlers.GetBookById)
-	// books.DELETE("/:id", handlers.HandleDeleteBook)
+	books.GET("/:id", handler.GetById)
 
 	return router
 }
