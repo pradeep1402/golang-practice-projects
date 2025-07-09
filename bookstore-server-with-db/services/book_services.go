@@ -8,6 +8,7 @@ import (
 type BookRepository interface {
 	GetByID(ctx context.Context, id int) (models.Book, error)
 	GetBooks(ctx context.Context) ([]models.Book, error)
+	AddBook(ctx context.Context, book models.PostFormBook) (models.Book, error)
 }
 
 type BookService struct {
@@ -24,4 +25,8 @@ func (service *BookService) GetBookById(ctx context.Context, id int) (models.Boo
 
 func (service *BookService) GetBooks(ctx context.Context) ([]models.Book, error) {
 	return service.repo.GetBooks(ctx)
+}
+
+func (service *BookService) AddBook(ctx context.Context, book models.PostFormBook) (models.Book, error) {
+	return service.repo.AddBook(ctx, book)
 }

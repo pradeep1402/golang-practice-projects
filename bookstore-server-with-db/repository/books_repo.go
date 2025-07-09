@@ -35,3 +35,11 @@ func (repo *BookRepository) GetBooks(ctx context.Context) ([]models.Book, error)
 
 	return books, err
 }
+
+func (repo *BookRepository) AddBook(ctx context.Context, book models.PostFormBook) (models.Book, error) {
+	var insertedBook models.Book
+
+	err := repo.pool.QueryRow(ctx, "Insert into books (title, author, price) values($1, $2, $3)  RETURNING *", book.Title, book.Author, book.Price).Scan(&insertedBook.Id, &insertedBook.Title, &insertedBook.Author, &insertedBook.Price, &insertedBook.CreatedAt, &insertedBook.UpdatedAt)
+
+	return insertedBook, err
+}

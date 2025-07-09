@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"gin/models"
 	"gin/repository"
 	"gin/services"
 	"net/http"
@@ -41,6 +42,27 @@ func (s *BookHandler) GetBooks(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, books)
+}
+
+func (s *BookHandler) AddBook(ctx *gin.Context) {
+	title := ctx.PostForm("title")
+	author := ctx.PostForm("author")
+	price, err := strconv.ParseFloat(ctx.PostForm("price"), 64)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	book := models.PostFormBook{Title: title, Price: price, Author: author}
+	books, err := s.service.AddBook(ctx, book)
+
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
 

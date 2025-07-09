@@ -13,6 +13,7 @@ func CreateRouter(pool *pgxpool.Pool) *gin.Engine {
 	books := router.Group("/books")
 	books.GET("/", handler.GetBooks)
 	books.GET("/:id", handler.GetById)
+	books.POST("/", handler.AddBook)
 
 	return router
 }
