@@ -1,84 +1,43 @@
 package handlers
 
 import (
-	"fmt"
+	"context"
 	"gin/models"
 	"net/http"
 	"strconv"
-	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-var (
-	Books []models.Book
-	mu    sync.Mutex
-)
-
-func BookHandler(c *gin.Context) {
-	mu.Lock()
-	defer mu.Unlock()
-	fmt.Println(Books)
-	c.JSON(http.StatusOK, Books)
+type BookHandler struct {
+	dbPool *pgxpool.Pool
 }
 
-func genrator() func() int {
-	id := 10
-	return func() int {
-		id++
-		return id
-	}
+func CreateBookHandler(dbPool *pgxpool.Pool) *BookHandler {
+	return &BookHandler{dbPool: dbPool}
 }
 
-var idGenrator = genrator()
-
-func HandleAddBook(c *gin.Context) {
-	title := c.PostForm("title")
-	author := c.PostForm("author")
-	price := c.PostForm("price")
-
-	floatPrice, err := strconv.ParseFloat(price, 64)
-	if err != nil {
-		fmt.Println("Error:", err)
-		c.JSON(http.StatusNotFound, `{"err": "price is not a float"}`)
-	}
-
-	book := models.Book{Id: idGenrator(), Title: title, Author: author, Price: floatPrice}
-	Books = append(Books, book)
-	c.JSON(http.StatusOK, Books)
-}
-
-func HandleBook(ctx *gin.Context) {
-	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
-		return
-	}
-	for _, v := range Books {
-		if v.Id == int(id) {
-			ctx.JSON(http.StatusOK, v)
-			return
-		}
-	}
-
-	ctx.JSON(http.StatusNotFound, gin.H{"error": "Not Found"})
-}
-
-func HandleDeleteBook(ctx *gin.Context) {
+func (db *BookHandler) GetBookById(ctx *gin.Context) {
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
 
-	var books []models.Book
+	var book models.Book
+	err = db.dbPool.QueryRow(context.Background(), "Select * from books where id = $1", id).
+		Scan(&book.Id, &book.Title, &book.Author, &book.Price, &book.CreatedAt, &book.UpdatedAt)
 
-	for _, v := range Books {
-		if v.Id != int(id) {
-			books = append(books, v)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+		} else {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch book: " + err.Error()})
 		}
+		return
 	}
-	Books = books
 
-	ctx.JSON(http.StatusOK, Books)
+	ctx.JSON(200, book)
 }

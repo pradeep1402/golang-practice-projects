@@ -1,8 +1,12 @@
 package models
 
+import "time"
+
 type Book struct {
-	Id     int
-	Title  string
-	Author string
-	Price  float64
+	Id        int       `db:"id"`
+	Title     string    `db:"title"`
+	Author    string    `db:"author"`
+	Price     float64   `db:"price"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 }
