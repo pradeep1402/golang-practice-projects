@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"gin/models"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -39,4 +40,32 @@ func (db *BookHandler) GetBookById(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, book)
+}
+
+func (db *BookHandler) GetBooks(ctx *gin.Context) {
+	rows, err := db.dbPool.Query(ctx.Request.Context(), "Select * from books")
+	if err != nil {
+		log.Fatal("Error failed to read.")
+		ctx.JSON(http.StatusInternalServerError, gin.H{"err": "Failed to read"})
+		return
+	}
+
+	var books []models.Book
+	for rows.Next() {
+		var book models.Book
+		err := rows.Scan(&book.Id, &book.Title, &book.Author, &book.Price, &book.CreatedAt, &book.UpdatedAt)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to scan book row: " + err.Error()})
+			return
+		}
+
+		books = append(books, book)
+	}
+
+	if err := rows.Err(); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error during row iteration: " + err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, books)
 }
