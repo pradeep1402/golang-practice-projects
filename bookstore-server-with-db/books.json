@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "The Go Programming Language",
+    "author": "Alan A. A. Donovan",
+    "price": 39.99
+  },
+  {
+    "id": 2,
+    "title": "Introducing Go",
+    "author": "Caleb Doxsey",
+    "price": 24.95
+  },
+  {
+    "id": 3,
+    "title": "Go in Action",
+    "author": "William Kennedy",
+    "price": 29.99
+  },
+  {
+    "id": 4,
+    "title": "Concurrency in Go",
+    "author": "Katherine Cox-Buday",
+    "price": 34.99
+  },
+  {
+    "id": 5,
+    "title": "Go Web Programming",
+    "author": "Sau Sheong Chang",
+    "price": 31.5
+  }
+]
