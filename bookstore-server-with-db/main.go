@@ -12,14 +12,14 @@ import (
 )
 
 func main() {
-	ctx := context.Background()
+	dbCtx := context.Background()
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
 
 	dbUrl := os.Getenv("DATABASE_URL")
-	dbPool, err := db.ConnectDB(ctx, dbUrl)
+	dbPool, err := db.ConnectDB(dbCtx, dbUrl)
 	if err != nil {
 		log.Fatal("Error while connecting to db")
 	}

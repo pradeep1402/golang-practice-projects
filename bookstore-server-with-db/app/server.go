@@ -8,10 +8,11 @@ import (
 
 func SetupRouter(handlers *handlers.BookHandler) *gin.Engine {
 	router := gin.Default()
-	// router.GET("/", handlers.BookHandler)
-	// router.POST("/", handlers.HandleAddBook)
-	router.GET("book/:id", handlers.GetBookById)
-	// router.DELETE("book/:id", handlers.HandleDeleteBook)
+	books := router.Group("/books")
+	// books.GET("/", handlers.BookHandler)
+	// books.POST("/", handlers.HandleAddBook)
+	books.GET("/:id", handlers.GetBookById)
+	// books.DELETE("/:id", handlers.HandleDeleteBook)
 
 	return router
 }

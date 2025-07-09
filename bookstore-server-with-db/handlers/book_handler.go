@@ -1,13 +1,12 @@
 package handlers
 
 import (
-	"context"
 	"gin/models"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -27,7 +26,7 @@ func (db *BookHandler) GetBookById(ctx *gin.Context) {
 	}
 
 	var book models.Book
-	err = db.dbPool.QueryRow(context.Background(), "Select * from books where id = $1", id).
+	err = db.dbPool.QueryRow(ctx.Request.Context(), "Select * from books where id = $1", id).
 		Scan(&book.Id, &book.Title, &book.Author, &book.Price, &book.CreatedAt, &book.UpdatedAt)
 
 	if err != nil {
@@ -39,5 +38,5 @@ func (db *BookHandler) GetBookById(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, book)
+	ctx.JSON(http.StatusOK, book)
 }
