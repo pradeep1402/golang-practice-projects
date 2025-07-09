@@ -7,10 +7,11 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func SetupRouter(pool *pgxpool.Pool) *gin.Engine {
+func CreateRouter(pool *pgxpool.Pool) *gin.Engine {
 	handler := handlers.CreateBookHandler(pool)
 	router := gin.Default()
 	books := router.Group("/books")
+	books.GET("/", handler.GetBooks)
 	books.GET("/:id", handler.GetById)
 
 	return router

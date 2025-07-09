@@ -22,3 +22,16 @@ func (repo *BookRepository) GetByID(ctx context.Context, id int) (models.Book, e
 
 	return book, err
 }
+
+func (repo *BookRepository) GetBooks(ctx context.Context) ([]models.Book, error) {
+	var books []models.Book
+	rows, err := repo.pool.Query(ctx, "Select * from books")
+
+	for rows.Next() {
+		var book models.Book
+		err = rows.Scan(&book.Id, &book.Title, &book.Author, &book.Price, &book.CreatedAt, &book.UpdatedAt)
+		books = append(books, book)
+	}
+
+	return books, err
+}

@@ -24,6 +24,6 @@ func main() {
 	}
 	defer dbPool.Close()
 
-	server := app.SetupRouter(dbPool)
+	server := app.CreateRouter(dbPool)
 	server.Run(":8080")
 }

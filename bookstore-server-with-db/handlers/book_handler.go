@@ -35,3 +35,14 @@ func (s *BookHandler) GetById(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, book)
 }
+
+func (s *BookHandler) GetBooks(ctx *gin.Context) {
+	books, err := s.service.GetBooks(ctx)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, books)
+}
