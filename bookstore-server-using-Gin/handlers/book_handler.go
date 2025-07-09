@@ -47,3 +47,19 @@ func HandleAddBook(c *gin.Context) {
 	Books = append(Books, book)
 	c.JSON(http.StatusOK, Books)
 }
+
+func HandleBook(ctx *gin.Context) {
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+	for _, v := range Books {
+		if v.Id == int(id) {
+			ctx.JSON(http.StatusOK, v)
+			return
+		}
+	}
+
+	ctx.JSON(http.StatusNotFound, gin.H{"error": "Not Found"})
+}
