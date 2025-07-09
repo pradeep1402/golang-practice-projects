@@ -1,20 +1,29 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
+	"context"
 	"gin/app"
-	"gin/handlers"
+	"gin/db"
+	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	data, err := os.ReadFile("./books.json")
+	ctx := context.Background()
+	err := godotenv.Load()
 	if err != nil {
-		fmt.Println("Error while reading the data...")
+		log.Fatal("Error loading .env file")
 	}
 
-	json.Unmarshal(data, &handlers.Books)
+	dbUrl := os.Getenv("DATABASE_URL")
+	dbPool, err := db.ConnectDB(ctx, dbUrl)
+	if err != nil {
+		log.Fatal("Error while connecting to db")
+	}
+
+	defer dbPool.Close()
 
 	r := app.SetupRouter()
 	r.Run(":8080")
