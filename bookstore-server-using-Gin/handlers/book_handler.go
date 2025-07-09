@@ -49,7 +49,7 @@ func HandleAddBook(c *gin.Context) {
 }
 
 func HandleBook(ctx *gin.Context) {
-	id, err := strconv.ParseInt(ctx.Param("id"), 10, 32)
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
@@ -62,4 +62,23 @@ func HandleBook(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusNotFound, gin.H{"error": "Not Found"})
+}
+
+func HandleDeleteBook(ctx *gin.Context) {
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var books []models.Book
+
+	for _, v := range Books {
+		if v.Id != int(id) {
+			books = append(books, v)
+		}
+	}
+	Books = books
+
+	ctx.JSON(http.StatusOK, Books)
 }
