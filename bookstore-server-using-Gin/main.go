@@ -4,19 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"gin/app"
-	"gin/models"
+	"gin/handlers"
 	"os"
 )
 
 func main() {
 	data, err := os.ReadFile("./books.json")
-	var books []models.Book
 	if err != nil {
 		fmt.Println("Error while reading the data...")
 	}
 
-	json.Unmarshal(data, &books)
+	json.Unmarshal(data, &handlers.Books)
 
-	r := app.SetupRouter(books)
+	r := app.SetupRouter()
 	r.Run(":8080")
 }
