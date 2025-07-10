@@ -43,3 +43,17 @@ func (repo *BookRepository) AddBook(ctx context.Context, book models.PostFormBoo
 
 	return insertedBook, err
 }
+
+func (repo *BookRepository) UpdateBookPrice(ctx context.Context, id int, price float64) (models.Book, error) {
+	var updatedBook models.Book
+
+	err := repo.pool.QueryRow(ctx, "Update books SET price = $1 where id = $2 RETURNING *", price, id).Scan(&updatedBook.Id, &updatedBook.Title, &updatedBook.Author, &updatedBook.Price, &updatedBook.CreatedAt, &updatedBook.UpdatedAt)
+
+	return updatedBook, err
+}
+
+func (repo *BookRepository) DeleteById(ctx context.Context, id int) (models.Book, error) {
+	var book models.Book
+	err := repo.pool.QueryRow(ctx, "Delete From books where id = $1 RETURNING *", id).Scan(&book.Id, &book.Title, &book.Author, &book.Price, &book.CreatedAt, &book.UpdatedAt)
+	return book, err
+}

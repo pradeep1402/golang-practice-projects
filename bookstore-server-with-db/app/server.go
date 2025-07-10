@@ -14,6 +14,8 @@ func CreateRouter(pool *pgxpool.Pool) *gin.Engine {
 	books.GET("/", handler.GetBooks)
 	books.GET("/:id", handler.GetById)
 	books.POST("/", handler.AddBook)
+	books.PUT("/:id", handler.UpdateBookPrice)
+	books.DELETE(":id", handler.DeleteById)
 
 	return router
 }

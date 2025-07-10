@@ -9,6 +9,8 @@ type BookRepository interface {
 	GetByID(ctx context.Context, id int) (models.Book, error)
 	GetBooks(ctx context.Context) ([]models.Book, error)
 	AddBook(ctx context.Context, book models.PostFormBook) (models.Book, error)
+	UpdateBookPrice(ctx context.Context, id int, price float64) (models.Book, error)
+	DeleteById(ctx context.Context, id int) (models.Book, error)
 }
 
 type BookService struct {
@@ -29,4 +31,12 @@ func (service *BookService) GetBooks(ctx context.Context) ([]models.Book, error)
 
 func (service *BookService) AddBook(ctx context.Context, book models.PostFormBook) (models.Book, error) {
 	return service.repo.AddBook(ctx, book)
+}
+
+func (service *BookService) UpdateBookPrice(ctx context.Context, id int, price float64) (models.Book, error) {
+	return service.repo.UpdateBookPrice(ctx, id, price)
+}
+
+func (service *BookService) DeleteById(ctx context.Context, id int) (models.Book, error) {
+	return service.repo.DeleteById(ctx, id)
 }
