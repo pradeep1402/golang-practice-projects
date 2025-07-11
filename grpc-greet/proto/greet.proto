@@ -8,6 +8,19 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
 
+service CalculatorService {
+  rpc Sum (OperandsRequest) returns (OperandsResponse) {}
+}
+
+message OperandsRequest {
+  int64 operad1 = 1;
+  int64 operad2 = 2;
+}
+
+message OperandsResponse {
+  int64 sum = 1;
+}
+
 message HelloRequest {
   string name = 1;
 }

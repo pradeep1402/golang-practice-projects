@@ -24,7 +24,17 @@ func main() {
 	c := pb.NewGreeterClient(conn)
 	r, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: "pradeep"})
 	if err != nil {
-		log.Fatalf("could not greet: %v", err)
+		log.Fatalf("Could not sum: %v\n", err)
 	}
 	log.Printf("Greeting: %s", r.GetMessage())
+
+	calculatorClient := pb.NewCalculatorServiceClient(conn)
+
+	sumRes, err := calculatorClient.Sum(context.Background(), &pb.OperandsRequest{Operad1: 10, Operad2: 3})
+	if err != nil {
+		log.Fatalf("Could not sum: %v\n", err)
+	}
+	log.Printf("Sum Result: %d\n", sumRes.GetSum())
+
+	log.Println("All RPCs completed successfully!")
 }

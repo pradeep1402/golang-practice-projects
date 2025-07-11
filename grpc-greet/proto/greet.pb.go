@@ -21,6 +21,102 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type OperandsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Operad1       int64                  `protobuf:"varint,1,opt,name=operad1,proto3" json:"operad1,omitempty"`
+	Operad2       int64                  `protobuf:"varint,2,opt,name=operad2,proto3" json:"operad2,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OperandsRequest) Reset() {
+	*x = OperandsRequest{}
+	mi := &file_greet_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OperandsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OperandsRequest) ProtoMessage() {}
+
+func (x *OperandsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_greet_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OperandsRequest.ProtoReflect.Descriptor instead.
+func (*OperandsRequest) Descriptor() ([]byte, []int) {
+	return file_greet_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *OperandsRequest) GetOperad1() int64 {
+	if x != nil {
+		return x.Operad1
+	}
+	return 0
+}
+
+func (x *OperandsRequest) GetOperad2() int64 {
+	if x != nil {
+		return x.Operad2
+	}
+	return 0
+}
+
+type OperandsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sum           int64                  `protobuf:"varint,1,opt,name=sum,proto3" json:"sum,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OperandsResponse) Reset() {
+	*x = OperandsResponse{}
+	mi := &file_greet_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OperandsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OperandsResponse) ProtoMessage() {}
+
+func (x *OperandsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_greet_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OperandsResponse.ProtoReflect.Descriptor instead.
+func (*OperandsResponse) Descriptor() ([]byte, []int) {
+	return file_greet_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *OperandsResponse) GetSum() int64 {
+	if x != nil {
+		return x.Sum
+	}
+	return 0
+}
+
 type HelloRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -30,7 +126,7 @@ type HelloRequest struct {
 
 func (x *HelloRequest) Reset() {
 	*x = HelloRequest{}
-	mi := &file_greet_proto_msgTypes[0]
+	mi := &file_greet_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +138,7 @@ func (x *HelloRequest) String() string {
 func (*HelloRequest) ProtoMessage() {}
 
 func (x *HelloRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_greet_proto_msgTypes[0]
+	mi := &file_greet_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +151,7 @@ func (x *HelloRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloRequest.ProtoReflect.Descriptor instead.
 func (*HelloRequest) Descriptor() ([]byte, []int) {
-	return file_greet_proto_rawDescGZIP(), []int{0}
+	return file_greet_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *HelloRequest) GetName() string {
@@ -74,7 +170,7 @@ type HelloReply struct {
 
 func (x *HelloReply) Reset() {
 	*x = HelloReply{}
-	mi := &file_greet_proto_msgTypes[1]
+	mi := &file_greet_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +182,7 @@ func (x *HelloReply) String() string {
 func (*HelloReply) ProtoMessage() {}
 
 func (x *HelloReply) ProtoReflect() protoreflect.Message {
-	mi := &file_greet_proto_msgTypes[1]
+	mi := &file_greet_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,7 +195,7 @@ func (x *HelloReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HelloReply.ProtoReflect.Descriptor instead.
 func (*HelloReply) Descriptor() ([]byte, []int) {
-	return file_greet_proto_rawDescGZIP(), []int{1}
+	return file_greet_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *HelloReply) GetMessage() string {
@@ -113,14 +209,21 @@ var File_greet_proto protoreflect.FileDescriptor
 
 const file_greet_proto_rawDesc = "" +
 	"\n" +
-	"\vgreet.proto\x12\x05greet\"\"\n" +
+	"\vgreet.proto\x12\x05greet\"E\n" +
+	"\x0fOperandsRequest\x12\x18\n" +
+	"\aoperad1\x18\x01 \x01(\x03R\aoperad1\x12\x18\n" +
+	"\aoperad2\x18\x02 \x01(\x03R\aoperad2\"$\n" +
+	"\x10OperandsResponse\x12\x10\n" +
+	"\x03sum\x18\x01 \x01(\x03R\x03sum\"\"\n" +
 	"\fHelloRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
 	"\n" +
 	"HelloReply\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage2?\n" +
 	"\aGreeter\x124\n" +
-	"\bSayHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x00B\x1aZ\x18grpc-service-greet/protob\x06proto3"
+	"\bSayHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x002M\n" +
+	"\x11CalculatorService\x128\n" +
+	"\x03Sum\x12\x16.greet.OperandsRequest\x1a\x17.greet.OperandsResponse\"\x00B\x1aZ\x18grpc-service-greet/protob\x06proto3"
 
 var (
 	file_greet_proto_rawDescOnce sync.Once
@@ -134,16 +237,20 @@ func file_greet_proto_rawDescGZIP() []byte {
 	return file_greet_proto_rawDescData
 }
 
-var file_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_greet_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_greet_proto_goTypes = []any{
-	(*HelloRequest)(nil), // 0: greet.HelloRequest
-	(*HelloReply)(nil),   // 1: greet.HelloReply
+	(*OperandsRequest)(nil),  // 0: greet.OperandsRequest
+	(*OperandsResponse)(nil), // 1: greet.OperandsResponse
+	(*HelloRequest)(nil),     // 2: greet.HelloRequest
+	(*HelloReply)(nil),       // 3: greet.HelloReply
 }
 var file_greet_proto_depIdxs = []int32{
-	0, // 0: greet.Greeter.SayHello:input_type -> greet.HelloRequest
-	1, // 1: greet.Greeter.SayHello:output_type -> greet.HelloReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 0: greet.Greeter.SayHello:input_type -> greet.HelloRequest
+	0, // 1: greet.CalculatorService.Sum:input_type -> greet.OperandsRequest
+	3, // 2: greet.Greeter.SayHello:output_type -> greet.HelloReply
+	1, // 3: greet.CalculatorService.Sum:output_type -> greet.OperandsResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -160,9 +267,9 @@ func file_greet_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_greet_proto_rawDesc), len(file_greet_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_greet_proto_goTypes,
 		DependencyIndexes: file_greet_proto_depIdxs,
