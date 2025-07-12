@@ -103,6 +103,28 @@ func (s *Server) Average(stream pb.CalculatorService_AverageServer) error {
 	}
 }
 
+func (s *Server) GreetEveryone(stream pb.Greeter_GreetEveryoneServer) error {
+	log.Println("GreetEveryone invoked.")
+
+	for {
+		req, err := stream.Recv()
+
+		if err == io.EOF {
+			return nil
+		}
+
+		if err != nil {
+			log.Fatalf("Error while reading the stream: %v\n", err.Error())
+		}
+
+		err = stream.Send(&pb.HelloReply{Message: "hello " + req.Name})
+
+		if err != nil {
+			log.Fatalf("Error while sending the stream: %v\n", err.Error())
+		}
+	}
+}
+
 func main() {
 	lis, err := net.Listen("tcp", addr)
 

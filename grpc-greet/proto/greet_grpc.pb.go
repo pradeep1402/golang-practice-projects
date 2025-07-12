@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Greeter_SayHello_FullMethodName  = "/greet.Greeter/SayHello"
-	Greeter_SaysHello_FullMethodName = "/greet.Greeter/SaysHello"
-	Greeter_LongGreet_FullMethodName = "/greet.Greeter/LongGreet"
+	Greeter_SayHello_FullMethodName      = "/greet.Greeter/SayHello"
+	Greeter_SaysHello_FullMethodName     = "/greet.Greeter/SaysHello"
+	Greeter_LongGreet_FullMethodName     = "/greet.Greeter/LongGreet"
+	Greeter_GreetEveryone_FullMethodName = "/greet.Greeter/GreetEveryone"
 )
 
 // GreeterClient is the client API for Greeter service.
@@ -31,6 +32,7 @@ type GreeterClient interface {
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 	SaysHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HelloReply], error)
 	LongGreet(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[HelloRequest, HelloReply], error)
+	GreetEveryone(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[HelloRequest, HelloReply], error)
 }
 
 type greeterClient struct {
@@ -83,6 +85,19 @@ func (c *greeterClient) LongGreet(ctx context.Context, opts ...grpc.CallOption) 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Greeter_LongGreetClient = grpc.ClientStreamingClient[HelloRequest, HelloReply]
 
+func (c *greeterClient) GreetEveryone(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[HelloRequest, HelloReply], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Greeter_ServiceDesc.Streams[2], Greeter_GreetEveryone_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[HelloRequest, HelloReply]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Greeter_GreetEveryoneClient = grpc.BidiStreamingClient[HelloRequest, HelloReply]
+
 // GreeterServer is the server API for Greeter service.
 // All implementations must embed UnimplementedGreeterServer
 // for forward compatibility.
@@ -90,6 +105,7 @@ type GreeterServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	SaysHello(*HelloRequest, grpc.ServerStreamingServer[HelloReply]) error
 	LongGreet(grpc.ClientStreamingServer[HelloRequest, HelloReply]) error
+	GreetEveryone(grpc.BidiStreamingServer[HelloRequest, HelloReply]) error
 	mustEmbedUnimplementedGreeterServer()
 }
 
@@ -108,6 +124,9 @@ func (UnimplementedGreeterServer) SaysHello(*HelloRequest, grpc.ServerStreamingS
 }
 func (UnimplementedGreeterServer) LongGreet(grpc.ClientStreamingServer[HelloRequest, HelloReply]) error {
 	return status.Errorf(codes.Unimplemented, "method LongGreet not implemented")
+}
+func (UnimplementedGreeterServer) GreetEveryone(grpc.BidiStreamingServer[HelloRequest, HelloReply]) error {
+	return status.Errorf(codes.Unimplemented, "method GreetEveryone not implemented")
 }
 func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
 func (UnimplementedGreeterServer) testEmbeddedByValue()                 {}
@@ -166,6 +185,13 @@ func _Greeter_LongGreet_Handler(srv interface{}, stream grpc.ServerStream) error
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Greeter_LongGreetServer = grpc.ClientStreamingServer[HelloRequest, HelloReply]
 
+func _Greeter_GreetEveryone_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GreeterServer).GreetEveryone(&grpc.GenericServerStream[HelloRequest, HelloReply]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Greeter_GreetEveryoneServer = grpc.BidiStreamingServer[HelloRequest, HelloReply]
+
 // Greeter_ServiceDesc is the grpc.ServiceDesc for Greeter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -187,6 +213,12 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "LongGreet",
 			Handler:       _Greeter_LongGreet_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "GreetEveryone",
+			Handler:       _Greeter_GreetEveryone_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

@@ -126,4 +126,36 @@ func main() {
 	}
 
 	log.Println(avg)
+
+	// Greet Everyone
+	streamToGreetEveryone, err := c.GreetEveryone(context.Background())
+
+	if err != nil {
+		log.Fatalf("Error: %v\n", err.Error())
+	}
+
+	waitc := make(chan struct{})
+
+	go func() {
+		for _, req := range reqs {
+			streamToGreetEveryone.Send(req)
+			time.Sleep(1 * time.Second)
+		}
+		stream.CloseSend()
+	}()
+
+	go func() {
+		for {
+			reply, err := streamToGreetEveryone.Recv()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				log.Fatalf("Error while reading the stream: %v\n", err.Error())
+			}
+			log.Println(reply.Message)
+		}
+		close(waitc)
+	}()
+	<-waitc
 }

@@ -8,6 +8,7 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
   rpc SaysHello (HelloRequest) returns (stream HelloReply) {}
   rpc LongGreet (stream HelloRequest) returns (HelloReply) {}
+  rpc GreetEveryone (stream HelloRequest) returns (stream HelloReply) {}
 }
 
 service CalculatorService {

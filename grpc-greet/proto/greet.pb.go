@@ -311,11 +311,12 @@ const file_greet_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"&\n" +
 	"\n" +
 	"HelloReply\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2\xb1\x01\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage2\xf0\x01\n" +
 	"\aGreeter\x124\n" +
 	"\bSayHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x00\x127\n" +
 	"\tSaysHello\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x000\x01\x127\n" +
-	"\tLongGreet\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x00(\x012\xbc\x01\n" +
+	"\tLongGreet\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x00(\x01\x12=\n" +
+	"\rGreetEveryone\x12\x13.greet.HelloRequest\x1a\x11.greet.HelloReply\"\x00(\x010\x012\xbc\x01\n" +
 	"\x11CalculatorService\x128\n" +
 	"\x03Sum\x12\x16.greet.OperandsRequest\x1a\x17.greet.OperandsResponse\"\x00\x129\n" +
 	"\vPrimeFactor\x12\r.greet.Number\x1a\x17.greet.OperandsResponse\"\x000\x01\x122\n" +
@@ -346,17 +347,19 @@ var file_greet_proto_depIdxs = []int32{
 	4, // 0: greet.Greeter.SayHello:input_type -> greet.HelloRequest
 	4, // 1: greet.Greeter.SaysHello:input_type -> greet.HelloRequest
 	4, // 2: greet.Greeter.LongGreet:input_type -> greet.HelloRequest
-	2, // 3: greet.CalculatorService.Sum:input_type -> greet.OperandsRequest
-	0, // 4: greet.CalculatorService.PrimeFactor:input_type -> greet.Number
-	0, // 5: greet.CalculatorService.Average:input_type -> greet.Number
-	5, // 6: greet.Greeter.SayHello:output_type -> greet.HelloReply
-	5, // 7: greet.Greeter.SaysHello:output_type -> greet.HelloReply
-	5, // 8: greet.Greeter.LongGreet:output_type -> greet.HelloReply
-	3, // 9: greet.CalculatorService.Sum:output_type -> greet.OperandsResponse
-	3, // 10: greet.CalculatorService.PrimeFactor:output_type -> greet.OperandsResponse
-	1, // 11: greet.CalculatorService.Average:output_type -> greet.AverageResult
-	6, // [6:12] is the sub-list for method output_type
-	0, // [0:6] is the sub-list for method input_type
+	4, // 3: greet.Greeter.GreetEveryone:input_type -> greet.HelloRequest
+	2, // 4: greet.CalculatorService.Sum:input_type -> greet.OperandsRequest
+	0, // 5: greet.CalculatorService.PrimeFactor:input_type -> greet.Number
+	0, // 6: greet.CalculatorService.Average:input_type -> greet.Number
+	5, // 7: greet.Greeter.SayHello:output_type -> greet.HelloReply
+	5, // 8: greet.Greeter.SaysHello:output_type -> greet.HelloReply
+	5, // 9: greet.Greeter.LongGreet:output_type -> greet.HelloReply
+	5, // 10: greet.Greeter.GreetEveryone:output_type -> greet.HelloReply
+	3, // 11: greet.CalculatorService.Sum:output_type -> greet.OperandsResponse
+	3, // 12: greet.CalculatorService.PrimeFactor:output_type -> greet.OperandsResponse
+	1, // 13: greet.CalculatorService.Average:output_type -> greet.AverageResult
+	7, // [7:14] is the sub-list for method output_type
+	0, // [0:7] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
