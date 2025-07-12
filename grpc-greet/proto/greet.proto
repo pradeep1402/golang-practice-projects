@@ -6,10 +6,22 @@ option go_package = "grpc-service-greet/proto";
 
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SaysHello (HelloRequest) returns (stream HelloReply) {}
+  rpc LongGreet (stream HelloRequest) returns (HelloReply) {}
 }
 
 service CalculatorService {
   rpc Sum (OperandsRequest) returns (OperandsResponse) {}
+  rpc PrimeFactor (Number) returns (stream OperandsResponse) {}
+  rpc Average (stream Number) returns (AverageResult) {}
+}
+
+message Number {
+  int64 number = 1;
+}
+
+message AverageResult {
+  float avg = 1;
 }
 
 message OperandsRequest {

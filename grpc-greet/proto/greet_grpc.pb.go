@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Greeter_SayHello_FullMethodName = "/greet.Greeter/SayHello"
+	Greeter_SayHello_FullMethodName  = "/greet.Greeter/SayHello"
+	Greeter_SaysHello_FullMethodName = "/greet.Greeter/SaysHello"
+	Greeter_LongGreet_FullMethodName = "/greet.Greeter/LongGreet"
 )
 
 // GreeterClient is the client API for Greeter service.
@@ -27,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GreeterClient interface {
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
+	SaysHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HelloReply], error)
+	LongGreet(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[HelloRequest, HelloReply], error)
 }
 
 type greeterClient struct {
@@ -47,11 +51,45 @@ func (c *greeterClient) SayHello(ctx context.Context, in *HelloRequest, opts ...
 	return out, nil
 }
 
+func (c *greeterClient) SaysHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HelloReply], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Greeter_ServiceDesc.Streams[0], Greeter_SaysHello_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[HelloRequest, HelloReply]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Greeter_SaysHelloClient = grpc.ServerStreamingClient[HelloReply]
+
+func (c *greeterClient) LongGreet(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[HelloRequest, HelloReply], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &Greeter_ServiceDesc.Streams[1], Greeter_LongGreet_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[HelloRequest, HelloReply]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Greeter_LongGreetClient = grpc.ClientStreamingClient[HelloRequest, HelloReply]
+
 // GreeterServer is the server API for Greeter service.
 // All implementations must embed UnimplementedGreeterServer
 // for forward compatibility.
 type GreeterServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
+	SaysHello(*HelloRequest, grpc.ServerStreamingServer[HelloReply]) error
+	LongGreet(grpc.ClientStreamingServer[HelloRequest, HelloReply]) error
 	mustEmbedUnimplementedGreeterServer()
 }
 
@@ -64,6 +102,12 @@ type UnimplementedGreeterServer struct{}
 
 func (UnimplementedGreeterServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+}
+func (UnimplementedGreeterServer) SaysHello(*HelloRequest, grpc.ServerStreamingServer[HelloReply]) error {
+	return status.Errorf(codes.Unimplemented, "method SaysHello not implemented")
+}
+func (UnimplementedGreeterServer) LongGreet(grpc.ClientStreamingServer[HelloRequest, HelloReply]) error {
+	return status.Errorf(codes.Unimplemented, "method LongGreet not implemented")
 }
 func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
 func (UnimplementedGreeterServer) testEmbeddedByValue()                 {}
@@ -104,6 +148,24 @@ func _Greeter_SayHello_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Greeter_SaysHello_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(HelloRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(GreeterServer).SaysHello(m, &grpc.GenericServerStream[HelloRequest, HelloReply]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Greeter_SaysHelloServer = grpc.ServerStreamingServer[HelloReply]
+
+func _Greeter_LongGreet_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GreeterServer).LongGreet(&grpc.GenericServerStream[HelloRequest, HelloReply]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type Greeter_LongGreetServer = grpc.ClientStreamingServer[HelloRequest, HelloReply]
+
 // Greeter_ServiceDesc is the grpc.ServiceDesc for Greeter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -116,12 +178,25 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Greeter_SayHello_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SaysHello",
+			Handler:       _Greeter_SaysHello_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "LongGreet",
+			Handler:       _Greeter_LongGreet_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "greet.proto",
 }
 
 const (
-	CalculatorService_Sum_FullMethodName = "/greet.CalculatorService/Sum"
+	CalculatorService_Sum_FullMethodName         = "/greet.CalculatorService/Sum"
+	CalculatorService_PrimeFactor_FullMethodName = "/greet.CalculatorService/PrimeFactor"
+	CalculatorService_Average_FullMethodName     = "/greet.CalculatorService/Average"
 )
 
 // CalculatorServiceClient is the client API for CalculatorService service.
@@ -129,6 +204,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CalculatorServiceClient interface {
 	Sum(ctx context.Context, in *OperandsRequest, opts ...grpc.CallOption) (*OperandsResponse, error)
+	PrimeFactor(ctx context.Context, in *Number, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OperandsResponse], error)
+	Average(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[Number, AverageResult], error)
 }
 
 type calculatorServiceClient struct {
@@ -149,11 +226,45 @@ func (c *calculatorServiceClient) Sum(ctx context.Context, in *OperandsRequest, 
 	return out, nil
 }
 
+func (c *calculatorServiceClient) PrimeFactor(ctx context.Context, in *Number, opts ...grpc.CallOption) (grpc.ServerStreamingClient[OperandsResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[0], CalculatorService_PrimeFactor_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[Number, OperandsResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_PrimeFactorClient = grpc.ServerStreamingClient[OperandsResponse]
+
+func (c *calculatorServiceClient) Average(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[Number, AverageResult], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[1], CalculatorService_Average_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[Number, AverageResult]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_AverageClient = grpc.ClientStreamingClient[Number, AverageResult]
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility.
 type CalculatorServiceServer interface {
 	Sum(context.Context, *OperandsRequest) (*OperandsResponse, error)
+	PrimeFactor(*Number, grpc.ServerStreamingServer[OperandsResponse]) error
+	Average(grpc.ClientStreamingServer[Number, AverageResult]) error
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -166,6 +277,12 @@ type UnimplementedCalculatorServiceServer struct{}
 
 func (UnimplementedCalculatorServiceServer) Sum(context.Context, *OperandsRequest) (*OperandsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Sum not implemented")
+}
+func (UnimplementedCalculatorServiceServer) PrimeFactor(*Number, grpc.ServerStreamingServer[OperandsResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method PrimeFactor not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Average(grpc.ClientStreamingServer[Number, AverageResult]) error {
+	return status.Errorf(codes.Unimplemented, "method Average not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 func (UnimplementedCalculatorServiceServer) testEmbeddedByValue()                           {}
@@ -206,6 +323,24 @@ func _CalculatorService_Sum_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CalculatorService_PrimeFactor_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(Number)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CalculatorServiceServer).PrimeFactor(m, &grpc.GenericServerStream[Number, OperandsResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_PrimeFactorServer = grpc.ServerStreamingServer[OperandsResponse]
+
+func _CalculatorService_Average_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).Average(&grpc.GenericServerStream[Number, AverageResult]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CalculatorService_AverageServer = grpc.ClientStreamingServer[Number, AverageResult]
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -218,6 +353,17 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CalculatorService_Sum_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "PrimeFactor",
+			Handler:       _CalculatorService_PrimeFactor_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "Average",
+			Handler:       _CalculatorService_Average_Handler,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "greet.proto",
 }
