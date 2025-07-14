@@ -7,7 +7,9 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 
 	pb "grpc-service-greet/proto"
 )
@@ -23,8 +25,8 @@ func main() {
 	defer conn.Close()
 
 	// greeter client
-	c := pb.NewGreeterClient(conn)
-	res, err := c.SayHello(context.Background(), &pb.HelloRequest{Name: "pradeep"})
+	greetClient := pb.NewGreeterClient(conn)
+	res, err := greetClient.SayHello(context.Background(), &pb.HelloRequest{Name: "pradeep"})
 	if err != nil {
 		log.Fatalf("Could not sum: %v\n", err)
 	}
@@ -39,7 +41,7 @@ func main() {
 	log.Printf("Sum Result: %d\n", sumRes.GetSum())
 
 	// saysHello client
-	result, err := c.SaysHello(context.Background(), &pb.HelloRequest{Name: "Its me..."})
+	result, err := greetClient.SaysHello(context.Background(), &pb.HelloRequest{Name: "Its me..."})
 	if err != nil {
 		log.Fatalf("Could not sum: %v\n", err)
 	}
@@ -84,7 +86,7 @@ func main() {
 		{Name: "danish"},
 		{Name: "charan"},
 	}
-	stream, err := c.LongGreet(context.Background())
+	stream, err := greetClient.LongGreet(context.Background())
 
 	if err != nil {
 		log.Fatalf("Errror: %v\n", err.Error())
@@ -128,7 +130,7 @@ func main() {
 	log.Println(avg)
 
 	// Greet Everyone
-	streamToGreetEveryone, err := c.GreetEveryone(context.Background())
+	streamToGreetEveryone, err := greetClient.GreetEveryone(context.Background())
 
 	if err != nil {
 		log.Fatalf("Error: %v\n", err.Error())
@@ -141,7 +143,7 @@ func main() {
 			streamToGreetEveryone.Send(req)
 			time.Sleep(1 * time.Second)
 		}
-		stream.CloseSend()
+		streamToGreetEveryone.CloseSend()
 	}()
 
 	go func() {
@@ -158,4 +160,29 @@ func main() {
 		close(waitc)
 	}()
 	<-waitc
+
+	// GreetWithDeadline
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	req := &pb.HelloRequest{Name: "Rahul"}
+
+	deadlineGreet, err := greetClient.GreetWithDeadline(ctx, req)
+
+	if err != nil {
+		e, ok := status.FromError(err)
+		if ok {
+			if e.Code() == codes.DeadlineExceeded {
+				log.Fatalf("Deadline exceeded: %s\n", e.Message())
+				return
+			} else {
+				log.Fatalf("Unexpected error %s\n", e.Message())
+				return
+			}
+		}
+
+		log.Fatalf("Error: %s\n", err.Error())
+	}
+
+	log.Println(deadlineGreet.Message)
+
 }

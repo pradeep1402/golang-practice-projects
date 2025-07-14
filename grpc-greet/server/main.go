@@ -5,10 +5,13 @@ import (
 	"io"
 	"log"
 	"net"
+	"time"
 
 	pb "grpc-service-greet/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 var addr string = "0.0.0.0:50051"
@@ -123,6 +126,21 @@ func (s *Server) GreetEveryone(stream pb.Greeter_GreetEveryoneServer) error {
 			log.Fatalf("Error while sending the stream: %v\n", err.Error())
 		}
 	}
+}
+
+func (s *Server) GreetWithDeadline(ctx context.Context, req *pb.HelloRequest) (*pb.HelloReply, error) {
+	log.Println("GreetWithDeadline invoked!")
+
+	for range 3 {
+		if ctx.Err() == context.DeadlineExceeded {
+			log.Println("The client canceled the request!")
+			return nil, status.Error(codes.Canceled, "The client canceled the request")
+		}
+
+		time.Sleep(1 * time.Second)
+	}
+
+	return &pb.HelloReply{Message: "Hello " + req.Name}, nil
 }
 
 func main() {

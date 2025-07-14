@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: greet.proto
+// source: proto/greet.proto
 
 package proto
 
@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Greeter_SayHello_FullMethodName      = "/greet.Greeter/SayHello"
-	Greeter_SaysHello_FullMethodName     = "/greet.Greeter/SaysHello"
-	Greeter_LongGreet_FullMethodName     = "/greet.Greeter/LongGreet"
-	Greeter_GreetEveryone_FullMethodName = "/greet.Greeter/GreetEveryone"
+	Greeter_SayHello_FullMethodName          = "/greet.Greeter/SayHello"
+	Greeter_SaysHello_FullMethodName         = "/greet.Greeter/SaysHello"
+	Greeter_LongGreet_FullMethodName         = "/greet.Greeter/LongGreet"
+	Greeter_GreetEveryone_FullMethodName     = "/greet.Greeter/GreetEveryone"
+	Greeter_GreetWithDeadline_FullMethodName = "/greet.Greeter/GreetWithDeadline"
 )
 
 // GreeterClient is the client API for Greeter service.
@@ -33,6 +34,7 @@ type GreeterClient interface {
 	SaysHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HelloReply], error)
 	LongGreet(ctx context.Context, opts ...grpc.CallOption) (grpc.ClientStreamingClient[HelloRequest, HelloReply], error)
 	GreetEveryone(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[HelloRequest, HelloReply], error)
+	GreetWithDeadline(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 }
 
 type greeterClient struct {
@@ -98,6 +100,16 @@ func (c *greeterClient) GreetEveryone(ctx context.Context, opts ...grpc.CallOpti
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Greeter_GreetEveryoneClient = grpc.BidiStreamingClient[HelloRequest, HelloReply]
 
+func (c *greeterClient) GreetWithDeadline(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HelloReply)
+	err := c.cc.Invoke(ctx, Greeter_GreetWithDeadline_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GreeterServer is the server API for Greeter service.
 // All implementations must embed UnimplementedGreeterServer
 // for forward compatibility.
@@ -106,6 +118,7 @@ type GreeterServer interface {
 	SaysHello(*HelloRequest, grpc.ServerStreamingServer[HelloReply]) error
 	LongGreet(grpc.ClientStreamingServer[HelloRequest, HelloReply]) error
 	GreetEveryone(grpc.BidiStreamingServer[HelloRequest, HelloReply]) error
+	GreetWithDeadline(context.Context, *HelloRequest) (*HelloReply, error)
 	mustEmbedUnimplementedGreeterServer()
 }
 
@@ -127,6 +140,9 @@ func (UnimplementedGreeterServer) LongGreet(grpc.ClientStreamingServer[HelloRequ
 }
 func (UnimplementedGreeterServer) GreetEveryone(grpc.BidiStreamingServer[HelloRequest, HelloReply]) error {
 	return status.Errorf(codes.Unimplemented, "method GreetEveryone not implemented")
+}
+func (UnimplementedGreeterServer) GreetWithDeadline(context.Context, *HelloRequest) (*HelloReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GreetWithDeadline not implemented")
 }
 func (UnimplementedGreeterServer) mustEmbedUnimplementedGreeterServer() {}
 func (UnimplementedGreeterServer) testEmbeddedByValue()                 {}
@@ -192,6 +208,24 @@ func _Greeter_GreetEveryone_Handler(srv interface{}, stream grpc.ServerStream) e
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type Greeter_GreetEveryoneServer = grpc.BidiStreamingServer[HelloRequest, HelloReply]
 
+func _Greeter_GreetWithDeadline_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HelloRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GreeterServer).GreetWithDeadline(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Greeter_GreetWithDeadline_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GreeterServer).GreetWithDeadline(ctx, req.(*HelloRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Greeter_ServiceDesc is the grpc.ServiceDesc for Greeter service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,6 +236,10 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SayHello",
 			Handler:    _Greeter_SayHello_Handler,
+		},
+		{
+			MethodName: "GreetWithDeadline",
+			Handler:    _Greeter_GreetWithDeadline_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
@@ -222,7 +260,7 @@ var Greeter_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "greet.proto",
+	Metadata: "proto/greet.proto",
 }
 
 const (
@@ -397,5 +435,5 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 	},
-	Metadata: "greet.proto",
+	Metadata: "proto/greet.proto",
 }
