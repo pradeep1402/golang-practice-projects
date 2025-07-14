@@ -1,12 +1,17 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	pb "grpc-bidirectional/proto"
 	"io"
 	"log"
+	"math"
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Server struct {
@@ -37,7 +42,19 @@ func (s *Server) Max(stream pb.CalculatorService_MaxServer) error {
 			log.Fatalf("Error: %v\n", err.Error())
 		}
 	}
+}
 
+func (s *Server) Squt(ctx context.Context, req *pb.SqutRequest) (*pb.SqutResponse, error) {
+	log.Println("Squt func invoked...")
+	num := req.GetNumber()
+
+	if num < 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "%s", fmt.Sprintf("Recieved negative number: %d", num))
+	}
+
+	return &pb.SqutResponse{
+		SquareRoot: float32(math.Sqrt(float64(num))),
+	}, nil
 }
 
 func main() {

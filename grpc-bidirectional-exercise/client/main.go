@@ -8,7 +8,9 @@ import (
 	pb "grpc-bidirectional/proto"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 const addr = "localhost:50051"
@@ -21,7 +23,7 @@ func main() {
 	}
 	defer conn.Close()
 
-	maxClient := pb.NewCalculatorServiceClient(conn)
+	client := pb.NewCalculatorServiceClient(conn)
 
 	numbers := []*pb.MaxRequest{
 		{Num: 12},
@@ -31,7 +33,7 @@ func main() {
 	}
 	log.Println("connected...")
 
-	stream, err := maxClient.Max(context.Background())
+	stream, err := client.Max(context.Background())
 
 	if err != nil {
 		log.Printf("Error: %v\n", err)
@@ -63,4 +65,24 @@ func main() {
 	}()
 
 	<-wait
+
+	squt, err := client.Squt(context.Background(), &pb.SqutRequest{Number: -25})
+
+	if err != nil {
+		e, ok := status.FromError(err)
+
+		if ok {
+			log.Fatalf("Error message from server: %s\n", e.Message())
+			log.Fatalf("Error code is: %s\n", e.Code())
+
+			if e.Code() == codes.InvalidArgument {
+				log.Fatalln("Send a negative number!")
+				return
+			}
+		} else {
+			log.Fatalf("Error: %v\n", err.Error())
+		}
+	}
+
+	log.Println(squt.SquareRoot)
 }

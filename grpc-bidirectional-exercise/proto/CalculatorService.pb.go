@@ -109,6 +109,94 @@ func (x *MaxResponse) GetMax() int64 {
 	return 0
 }
 
+type SqutRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Number        int32                  `protobuf:"varint,1,opt,name=number,proto3" json:"number,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SqutRequest) Reset() {
+	*x = SqutRequest{}
+	mi := &file_proto_CalculatorService_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SqutRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SqutRequest) ProtoMessage() {}
+
+func (x *SqutRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_CalculatorService_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SqutRequest.ProtoReflect.Descriptor instead.
+func (*SqutRequest) Descriptor() ([]byte, []int) {
+	return file_proto_CalculatorService_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SqutRequest) GetNumber() int32 {
+	if x != nil {
+		return x.Number
+	}
+	return 0
+}
+
+type SqutResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SquareRoot    float32                `protobuf:"fixed32,1,opt,name=SquareRoot,proto3" json:"SquareRoot,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SqutResponse) Reset() {
+	*x = SqutResponse{}
+	mi := &file_proto_CalculatorService_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SqutResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SqutResponse) ProtoMessage() {}
+
+func (x *SqutResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_CalculatorService_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SqutResponse.ProtoReflect.Descriptor instead.
+func (*SqutResponse) Descriptor() ([]byte, []int) {
+	return file_proto_CalculatorService_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *SqutResponse) GetSquareRoot() float32 {
+	if x != nil {
+		return x.SquareRoot
+	}
+	return 0
+}
+
 var File_proto_CalculatorService_proto protoreflect.FileDescriptor
 
 const file_proto_CalculatorService_proto_rawDesc = "" +
@@ -118,9 +206,16 @@ const file_proto_CalculatorService_proto_rawDesc = "" +
 	"MaxRequest\x12\x10\n" +
 	"\x03num\x18\x01 \x01(\x03R\x03num\"\x1f\n" +
 	"\vMaxResponse\x12\x10\n" +
-	"\x03max\x18\x01 \x01(\x03R\x03max2_\n" +
+	"\x03max\x18\x01 \x01(\x03R\x03max\"%\n" +
+	"\vSqutRequest\x12\x16\n" +
+	"\x06number\x18\x01 \x01(\x05R\x06number\".\n" +
+	"\fSqutResponse\x12\x1e\n" +
+	"\n" +
+	"SquareRoot\x18\x01 \x01(\x02R\n" +
+	"SquareRoot2\xaa\x01\n" +
 	"\x11CalculatorService\x12J\n" +
-	"\x03Max\x12\x1d.calculatorService.MaxRequest\x1a\x1e.calculatorService.MaxResponse\"\x00(\x010\x01B\x18Z\x16grpc-bidirectional/outb\x06proto3"
+	"\x03Max\x12\x1d.calculatorService.MaxRequest\x1a\x1e.calculatorService.MaxResponse\"\x00(\x010\x01\x12I\n" +
+	"\x04Squt\x12\x1e.calculatorService.SqutRequest\x1a\x1f.calculatorService.SqutResponse\"\x00B\x18Z\x16grpc-bidirectional/outb\x06proto3"
 
 var (
 	file_proto_CalculatorService_proto_rawDescOnce sync.Once
@@ -134,16 +229,20 @@ func file_proto_CalculatorService_proto_rawDescGZIP() []byte {
 	return file_proto_CalculatorService_proto_rawDescData
 }
 
-var file_proto_CalculatorService_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_CalculatorService_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_CalculatorService_proto_goTypes = []any{
-	(*MaxRequest)(nil),  // 0: calculatorService.MaxRequest
-	(*MaxResponse)(nil), // 1: calculatorService.MaxResponse
+	(*MaxRequest)(nil),   // 0: calculatorService.MaxRequest
+	(*MaxResponse)(nil),  // 1: calculatorService.MaxResponse
+	(*SqutRequest)(nil),  // 2: calculatorService.SqutRequest
+	(*SqutResponse)(nil), // 3: calculatorService.SqutResponse
 }
 var file_proto_CalculatorService_proto_depIdxs = []int32{
 	0, // 0: calculatorService.CalculatorService.Max:input_type -> calculatorService.MaxRequest
-	1, // 1: calculatorService.CalculatorService.Max:output_type -> calculatorService.MaxResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: calculatorService.CalculatorService.Squt:input_type -> calculatorService.SqutRequest
+	1, // 2: calculatorService.CalculatorService.Max:output_type -> calculatorService.MaxResponse
+	3, // 3: calculatorService.CalculatorService.Squt:output_type -> calculatorService.SqutResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -160,7 +259,7 @@ func file_proto_CalculatorService_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_CalculatorService_proto_rawDesc), len(file_proto_CalculatorService_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
