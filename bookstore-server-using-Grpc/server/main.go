@@ -13,10 +13,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Server struct {
-	pb.UnimplementedBookStoreServer
-}
-
 const addr = ("localhost:50051")
 
 func main() {
