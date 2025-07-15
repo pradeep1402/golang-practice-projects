@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package bookStore;
+
+option go_package = "grpc-bookStore/proto"; 
+
+service BookStore {
+  rpc GetById(BookIdRequest) returns (BookDetailResponse) {}
+}
+
+message BookIdRequest  {
+   int64 id = 1;
+}
+
+message BookDetailResponse {
+  int64 id  = 1;
+  string titile  = 2;
+  string author = 3;
+  float price = 4;
+}
