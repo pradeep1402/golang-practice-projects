@@ -18,6 +18,7 @@ func CreateBookStoreHandler(services *services.BookServices) *BookStoreHandler {
 
 func (s *BookStoreHandler) GetById(ctx context.Context, req *pb.BookIdRequest) (*pb.BookDetailResponse, error) {
 	id := int(req.GetId())
+	log.Printf("GetByID is invoked with %v.\n", id)
 	book, err := s.services.GetByID(ctx, id)
 
 	if err != nil {
