@@ -9,6 +9,7 @@ package proto
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -68,7 +69,7 @@ func (x *BookIdRequest) GetId() int64 {
 type BookDetailResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Titile        string                 `protobuf:"bytes,2,opt,name=titile,proto3" json:"titile,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Author        string                 `protobuf:"bytes,3,opt,name=author,proto3" json:"author,omitempty"`
 	Price         float32                `protobuf:"fixed32,4,opt,name=price,proto3" json:"price,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -112,9 +113,9 @@ func (x *BookDetailResponse) GetId() int64 {
 	return 0
 }
 
-func (x *BookDetailResponse) GetTitile() string {
+func (x *BookDetailResponse) GetTitle() string {
 	if x != nil {
-		return x.Titile
+		return x.Title
 	}
 	return ""
 }
@@ -133,20 +134,67 @@ func (x *BookDetailResponse) GetPrice() float32 {
 	return 0
 }
 
+type BooksDetailResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Books         []*BookDetailResponse  `protobuf:"bytes,1,rep,name=books,proto3" json:"books,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BooksDetailResponse) Reset() {
+	*x = BooksDetailResponse{}
+	mi := &file_proto_bookStore_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BooksDetailResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BooksDetailResponse) ProtoMessage() {}
+
+func (x *BooksDetailResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_bookStore_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BooksDetailResponse.ProtoReflect.Descriptor instead.
+func (*BooksDetailResponse) Descriptor() ([]byte, []int) {
+	return file_proto_bookStore_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *BooksDetailResponse) GetBooks() []*BookDetailResponse {
+	if x != nil {
+		return x.Books
+	}
+	return nil
+}
+
 var File_proto_bookStore_proto protoreflect.FileDescriptor
 
 const file_proto_bookStore_proto_rawDesc = "" +
 	"\n" +
-	"\x15proto/bookStore.proto\x12\tbookStore\"\x1f\n" +
+	"\x15proto/bookStore.proto\x12\tbookStore\x1a\x1bgoogle/protobuf/empty.proto\"\x1f\n" +
 	"\rBookIdRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"j\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"h\n" +
 	"\x12BookDetailResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x16\n" +
-	"\x06titile\x18\x02 \x01(\tR\x06titile\x12\x16\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\x12\x16\n" +
 	"\x06author\x18\x03 \x01(\tR\x06author\x12\x14\n" +
-	"\x05price\x18\x04 \x01(\x02R\x05price2Q\n" +
+	"\x05price\x18\x04 \x01(\x02R\x05price\"J\n" +
+	"\x13BooksDetailResponse\x123\n" +
+	"\x05books\x18\x01 \x03(\v2\x1d.bookStore.BookDetailResponseR\x05books2\x97\x01\n" +
 	"\tBookStore\x12D\n" +
-	"\aGetById\x12\x18.bookStore.BookIdRequest\x1a\x1d.bookStore.BookDetailResponse\"\x00B\x16Z\x14grpc-bookStore/protob\x06proto3"
+	"\aGetById\x12\x18.bookStore.BookIdRequest\x1a\x1d.bookStore.BookDetailResponse\"\x00\x12D\n" +
+	"\bGetBooks\x12\x16.google.protobuf.Empty\x1a\x1e.bookStore.BooksDetailResponse\"\x00B\x16Z\x14grpc-bookStore/protob\x06proto3"
 
 var (
 	file_proto_bookStore_proto_rawDescOnce sync.Once
@@ -160,19 +208,24 @@ func file_proto_bookStore_proto_rawDescGZIP() []byte {
 	return file_proto_bookStore_proto_rawDescData
 }
 
-var file_proto_bookStore_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_bookStore_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_proto_bookStore_proto_goTypes = []any{
-	(*BookIdRequest)(nil),      // 0: bookStore.BookIdRequest
-	(*BookDetailResponse)(nil), // 1: bookStore.BookDetailResponse
+	(*BookIdRequest)(nil),       // 0: bookStore.BookIdRequest
+	(*BookDetailResponse)(nil),  // 1: bookStore.BookDetailResponse
+	(*BooksDetailResponse)(nil), // 2: bookStore.BooksDetailResponse
+	(*emptypb.Empty)(nil),       // 3: google.protobuf.Empty
 }
 var file_proto_bookStore_proto_depIdxs = []int32{
-	0, // 0: bookStore.BookStore.GetById:input_type -> bookStore.BookIdRequest
-	1, // 1: bookStore.BookStore.GetById:output_type -> bookStore.BookDetailResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: bookStore.BooksDetailResponse.books:type_name -> bookStore.BookDetailResponse
+	0, // 1: bookStore.BookStore.GetById:input_type -> bookStore.BookIdRequest
+	3, // 2: bookStore.BookStore.GetBooks:input_type -> google.protobuf.Empty
+	1, // 3: bookStore.BookStore.GetById:output_type -> bookStore.BookDetailResponse
+	2, // 4: bookStore.BookStore.GetBooks:output_type -> bookStore.BooksDetailResponse
+	3, // [3:5] is the sub-list for method output_type
+	1, // [1:3] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_proto_bookStore_proto_init() }
@@ -186,7 +239,7 @@ func file_proto_bookStore_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_bookStore_proto_rawDesc), len(file_proto_bookStore_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

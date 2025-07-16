@@ -2,10 +2,13 @@ syntax = "proto3";
 
 package bookStore;
 
+import "google/protobuf/empty.proto";
+
 option go_package = "grpc-bookStore/proto"; 
 
 service BookStore {
   rpc GetById(BookIdRequest) returns (BookDetailResponse) {}
+  rpc GetBooks(google.protobuf.Empty) returns (BooksDetailResponse) {}
 }
 
 message BookIdRequest  {
@@ -14,7 +17,11 @@ message BookIdRequest  {
 
 message BookDetailResponse {
   int64 id  = 1;
-  string titile  = 2;
+  string title  = 2;
   string author = 3;
   float price = 4;
+}
+
+message BooksDetailResponse {
+  repeated BookDetailResponse books = 1;
 }
