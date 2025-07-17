@@ -2,9 +2,10 @@ package handlers
 
 import (
 	"context"
-	pb "grpc-auth-jwt/gen"
 	"grpc-auth-jwt/internal/services"
 	"log"
+
+	pb "github.com/pradeep1402/golang-practice-projects/shared-proto/gen/auth"
 )
 
 type AuthHandler struct {

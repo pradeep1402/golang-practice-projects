@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	pb "grpc-auth-jwt/gen"
+	pb "github.com/pradeep1402/golang-practice-projects/shared-proto/gen/auth"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
