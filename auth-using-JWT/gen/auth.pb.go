@@ -127,9 +127,10 @@ const file_auth_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x1f\n" +
 	"\vJwtResponse\x12\x10\n" +
-	"\x03jwt\x18\x01 \x01(\tR\x03jwt2@\n" +
+	"\x03jwt\x18\x01 \x01(\tR\x03jwt2w\n" +
 	"\x04Auth\x128\n" +
-	"\bRegister\x12\x17.auth.UserDetailRequest\x1a\x11.auth.JwtResponse\"\x00B\x1dZ\x1bgrpc-auth-jwt/gen/auth;authb\x06proto3"
+	"\bRegister\x12\x17.auth.UserDetailRequest\x1a\x11.auth.JwtResponse\"\x00\x125\n" +
+	"\x05Login\x12\x17.auth.UserDetailRequest\x1a\x11.auth.JwtResponse\"\x00B\x1dZ\x1bgrpc-auth-jwt/gen/auth;authb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once
@@ -150,9 +151,11 @@ var file_auth_proto_goTypes = []any{
 }
 var file_auth_proto_depIdxs = []int32{
 	0, // 0: auth.Auth.Register:input_type -> auth.UserDetailRequest
-	1, // 1: auth.Auth.Register:output_type -> auth.JwtResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 1: auth.Auth.Login:input_type -> auth.UserDetailRequest
+	1, // 2: auth.Auth.Register:output_type -> auth.JwtResponse
+	1, // 3: auth.Auth.Login:output_type -> auth.JwtResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

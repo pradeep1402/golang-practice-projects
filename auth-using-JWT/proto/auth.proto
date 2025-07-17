@@ -5,6 +5,7 @@ option go_package = "grpc-auth-jwt/gen/auth;auth";
 
 service Auth {
   rpc Register(UserDetailRequest) returns (JwtResponse) {}
+  rpc Login(UserDetailRequest) returns (JwtResponse) {}
 }
 
 message UserDetailRequest{

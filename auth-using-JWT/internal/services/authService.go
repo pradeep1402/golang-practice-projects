@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"grpc-auth-jwt/internal/models"
 	repo "grpc-auth-jwt/internal/repository"
 	"log"
 	"time"
@@ -12,6 +13,7 @@ import (
 
 type AuthRepository interface {
 	Register(ctx context.Context, email string, password string) error
+	Login(ctx context.Context, email string) (models.User, error)
 }
 
 type AuthService struct {
@@ -69,6 +71,28 @@ func (r *AuthService) Register(ctx context.Context, email string, password strin
 	jwt, err := createToken(email)
 	if err != nil {
 		log.Fatalf("Unable to create token: %s\n", err.Error())
+		return "", err
+	}
+
+	return jwt, nil
+}
+
+func (r *AuthService) Login(ctx context.Context, email string, password string) (string, error) {
+	user, err := r.repo.Login(ctx, email)
+	if err != nil {
+		log.Fatalf("Unable to hash password: %s\n", err.Error())
+		return "", err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	if err != nil {
+		return "", err
+	}
+
+	jwt, err := createToken(email)
+
+	if err != nil {
+		log.Fatalf("Unable to genrate the jwt: %s\n", err.Error())
 		return "", err
 	}
 

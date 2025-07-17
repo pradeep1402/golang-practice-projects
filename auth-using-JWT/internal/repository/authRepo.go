@@ -3,6 +3,7 @@ package repo
 import (
 	"context"
 	"fmt"
+	"grpc-auth-jwt/internal/models"
 	"log"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -32,4 +33,12 @@ func (pool *AuthRepository) Register(ctx context.Context, email string, hashedPa
 
 	log.Printf("User registered successfully: %s", email)
 	return nil
+}
+
+func (pool *AuthRepository) Login(ctx context.Context, email string) (models.User, error) {
+	var user models.User
+	err := pool.pool.QueryRow(ctx, "SELECT email, password FROM users WHERE email = $1", email).
+		Scan(&user.Email, &user.Password)
+
+	return user, err
 }

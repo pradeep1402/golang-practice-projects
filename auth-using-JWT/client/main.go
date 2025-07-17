@@ -22,9 +22,17 @@ func main() {
 
 	authClient := pb.NewAuthClient(conn)
 
-	res, err := authClient.Register(context.Background(),
-		&pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
+	// res, err := authClient.Register(context.Background(),
+	// &pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
 
+	// loggingResult(err, res)
+
+	res, err := authClient.Login(context.Background(), &pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
+
+	loggingResult(err, res)
+}
+
+func loggingResult(err error, res *pb.JwtResponse) {
 	if err != nil {
 		log.Fatalf("Unable to Register: %s\n", err.Error())
 	}

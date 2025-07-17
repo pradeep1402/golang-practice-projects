@@ -27,3 +27,14 @@ func (s *AuthHandler) Register(ctx context.Context, req *pb.UserDetailRequest) (
 
 	return &pb.JwtResponse{Jwt: jwt}, nil
 }
+
+func (s *AuthHandler) Login(ctx context.Context, req *pb.UserDetailRequest) (*pb.JwtResponse, error) {
+	log.Println("Login invoked!")
+	res, err := s.services.Login(ctx, req.Email, req.Password)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.JwtResponse{Jwt: res}, err
+}
