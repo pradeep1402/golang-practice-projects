@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"log"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -18,6 +17,5 @@ func ConnectDB(ctx context.Context) (*pgxpool.Pool, error) {
 	dbUrl := os.Getenv("DATABASE_URL")
 	dbPool, err := pgxpool.New(ctx, dbUrl)
 
-	log.Println("Succesfully connected to db!")
 	return dbPool, err
 }
