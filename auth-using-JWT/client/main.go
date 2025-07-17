@@ -1,0 +1,33 @@
+package main
+
+import (
+	"context"
+	"log"
+
+	pb "grpc-auth-jwt/gen"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+const url = "localhost:50051"
+
+func main() {
+	conn, err := grpc.NewClient(url, grpc.WithTransportCredentials(insecure.NewCredentials()))
+
+	if err != nil {
+		log.Fatalf("Unable to connect with the server: %v\n", err.Error())
+	}
+	defer conn.Close()
+
+	authClient := pb.NewAuthClient(conn)
+
+	res, err := authClient.Register(context.Background(),
+		&pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
+
+	if err != nil {
+		log.Fatalf("Unable to Register: %s\n", err.Error())
+	}
+
+	log.Printf("Jwt token: %s\n", res.GetJwt())
+}
