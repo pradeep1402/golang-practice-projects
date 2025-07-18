@@ -37,5 +37,16 @@ func (s *AuthHandler) Login(ctx context.Context, req *pb.UserDetailRequest) (*pb
 		return nil, err
 	}
 
-	return &pb.JwtResponse{Jwt: res}, err
+	return &pb.JwtResponse{Jwt: res}, nil
+}
+
+func (s *AuthHandler) Validate(ctx context.Context, req *pb.ValidateRequest) (*pb.ValidateResponse, error) {
+	log.Println("Validate invoked!")
+	res, err := services.Validate(ctx, req.AuthorizationToken)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ValidateResponse{IsValidUser: res}, nil
 }

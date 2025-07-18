@@ -30,6 +30,14 @@ func main() {
 	res, err := authClient.Login(context.Background(), &pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
 
 	loggingResult(err, res)
+
+	userDetail, err := authClient.Validate(context.Background(), &pb.ValidateRequest{AuthorizationToken: res.Jwt})
+
+	if err != nil || !userDetail.IsValidUser {
+		log.Fatalf("Invalid user: %s\n", err)
+	}
+
+	log.Println(userDetail.IsValidUser)
 }
 
 func loggingResult(err error, res *pb.JwtResponse) {
