@@ -6,6 +6,7 @@ option go_package = "github.com/pradeep1402/golang-practice-projects/shared-prot
 service Auth {
   rpc Register(UserDetailRequest) returns (JwtResponse) {}
   rpc Login(UserDetailRequest) returns (JwtResponse) {}
+  rpc Validate(ValidateRequest) returns (ValidateResponse) {}
 }
 
 message UserDetailRequest{
@@ -15,4 +16,12 @@ message UserDetailRequest{
 
 message JwtResponse {
   string jwt = 1;
+}
+
+message ValidateRequest {
+  string authorizationToken = 1;
+}
+
+message ValidateResponse {
+  bool isValidUser = 1;
 }

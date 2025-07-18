@@ -117,6 +117,94 @@ func (x *JwtResponse) GetJwt() string {
 	return ""
 }
 
+type ValidateRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	AuthorizationToken string                 `protobuf:"bytes,1,opt,name=authorizationToken,proto3" json:"authorizationToken,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *ValidateRequest) Reset() {
+	*x = ValidateRequest{}
+	mi := &file_auth_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateRequest) ProtoMessage() {}
+
+func (x *ValidateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateRequest.ProtoReflect.Descriptor instead.
+func (*ValidateRequest) Descriptor() ([]byte, []int) {
+	return file_auth_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ValidateRequest) GetAuthorizationToken() string {
+	if x != nil {
+		return x.AuthorizationToken
+	}
+	return ""
+}
+
+type ValidateResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsValidUser   bool                   `protobuf:"varint,1,opt,name=isValidUser,proto3" json:"isValidUser,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidateResponse) Reset() {
+	*x = ValidateResponse{}
+	mi := &file_auth_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateResponse) ProtoMessage() {}
+
+func (x *ValidateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_auth_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateResponse.ProtoReflect.Descriptor instead.
+func (*ValidateResponse) Descriptor() ([]byte, []int) {
+	return file_auth_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ValidateResponse) GetIsValidUser() bool {
+	if x != nil {
+		return x.IsValidUser
+	}
+	return false
+}
+
 var File_auth_proto protoreflect.FileDescriptor
 
 const file_auth_proto_rawDesc = "" +
@@ -127,10 +215,15 @@ const file_auth_proto_rawDesc = "" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"\x1f\n" +
 	"\vJwtResponse\x12\x10\n" +
-	"\x03jwt\x18\x01 \x01(\tR\x03jwt2w\n" +
+	"\x03jwt\x18\x01 \x01(\tR\x03jwt\"A\n" +
+	"\x0fValidateRequest\x12.\n" +
+	"\x12authorizationToken\x18\x01 \x01(\tR\x12authorizationToken\"4\n" +
+	"\x10ValidateResponse\x12 \n" +
+	"\visValidUser\x18\x01 \x01(\bR\visValidUser2\xb4\x01\n" +
 	"\x04Auth\x128\n" +
 	"\bRegister\x12\x17.auth.UserDetailRequest\x1a\x11.auth.JwtResponse\"\x00\x125\n" +
-	"\x05Login\x12\x17.auth.UserDetailRequest\x1a\x11.auth.JwtResponse\"\x00BLZJgithub.com/pradeep1402/golang-practice-projects/shared-proto/gen/auth;authb\x06proto3"
+	"\x05Login\x12\x17.auth.UserDetailRequest\x1a\x11.auth.JwtResponse\"\x00\x12;\n" +
+	"\bValidate\x12\x15.auth.ValidateRequest\x1a\x16.auth.ValidateResponse\"\x00BLZJgithub.com/pradeep1402/golang-practice-projects/shared-proto/gen/auth;authb\x06proto3"
 
 var (
 	file_auth_proto_rawDescOnce sync.Once
@@ -144,18 +237,22 @@ func file_auth_proto_rawDescGZIP() []byte {
 	return file_auth_proto_rawDescData
 }
 
-var file_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_auth_proto_goTypes = []any{
 	(*UserDetailRequest)(nil), // 0: auth.UserDetailRequest
 	(*JwtResponse)(nil),       // 1: auth.JwtResponse
+	(*ValidateRequest)(nil),   // 2: auth.ValidateRequest
+	(*ValidateResponse)(nil),  // 3: auth.ValidateResponse
 }
 var file_auth_proto_depIdxs = []int32{
 	0, // 0: auth.Auth.Register:input_type -> auth.UserDetailRequest
 	0, // 1: auth.Auth.Login:input_type -> auth.UserDetailRequest
-	1, // 2: auth.Auth.Register:output_type -> auth.JwtResponse
-	1, // 3: auth.Auth.Login:output_type -> auth.JwtResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	2, // 2: auth.Auth.Validate:input_type -> auth.ValidateRequest
+	1, // 3: auth.Auth.Register:output_type -> auth.JwtResponse
+	1, // 4: auth.Auth.Login:output_type -> auth.JwtResponse
+	3, // 5: auth.Auth.Validate:output_type -> auth.ValidateResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -172,7 +269,7 @@ func file_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_auth_proto_rawDesc), len(file_auth_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
