@@ -55,7 +55,7 @@ func createToken(email string) (string, error) {
 	return tokenString, nil
 }
 
-func verifyToker(token string) error {
+func verifyToken(token string) error {
 	t, err := jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
 		return []byte(key), nil
 	})
@@ -116,7 +116,7 @@ func (r *AuthService) Login(ctx context.Context, email string, password string) 
 }
 
 func Validate(ctx context.Context, jwt string) (bool, error) {
-	err := verifyToker(jwt)
+	err := verifyToken(jwt)
 
 	if err != nil {
 		log.Printf("Unable to verify: %s\n", err.Error())

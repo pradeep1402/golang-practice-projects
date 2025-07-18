@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-const addr = "localhost:50051"
+const addr = "localhost:50052"
 
 func main() {
 	lis, err := net.Listen("tcp", addr)

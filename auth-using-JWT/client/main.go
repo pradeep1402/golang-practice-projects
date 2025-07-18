@@ -27,7 +27,11 @@ func main() {
 
 	// loggingResult(err, res)
 
-	res, err := authClient.Login(context.Background(), &pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
+	req := &pb.UserDetailRequest{
+		Email:    "pradeep@mail.com",
+		Password: "Pradeep12@",
+	}
+	res, err := authClient.Login(context.Background(), req)
 
 	loggingResult(err, res)
 
