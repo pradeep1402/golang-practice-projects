@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-const url = "localhost:50051"
+const url = ":50051"
 
 func main() {
 	conn, err := grpc.NewClient(url, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -22,16 +22,12 @@ func main() {
 
 	authClient := pb.NewAuthClient(conn)
 
-	// res, err := authClient.Register(context.Background(),
-	// &pb.UserDetailRequest{Email: "pradeep@mail.com", Password: "Pradeep12@"})
-
-	// loggingResult(err, res)
-
 	req := &pb.UserDetailRequest{
 		Email:    "pradeep@mail.com",
 		Password: "Pradeep12@",
 	}
-	res, err := authClient.Login(context.Background(), req)
+	res, err := authClient.Register(context.Background(), req)
+	// res, err := authClient.Login(context.Background(), req)
 
 	loggingResult(err, res)
 

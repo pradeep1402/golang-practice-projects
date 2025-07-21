@@ -3,16 +3,27 @@ version: "3.8" # 🧾 Compose file format version
 services: # 🧱 Services to run — each is like a mini computer
   postgres: # 👨‍🔧 Name of the service (you can call it anything)
     image: postgres:15 # 📦 Download the official PostgreSQL version 15
-    container_name: bookstore-postgres # 🏷️ Name the container (for reference)
+    container_name: auth-postgres # 🏷️ Name the container (for reference)
     restart: always # 🔄 Restart if it crashes
     environment: # 🌍 Set up environment variables for the DB
       POSTGRES_USER: postgres # Username = postgres
       POSTGRES_PASSWORD: secret # Password = secret
-      POSTGRES_DB: bookstore # Database = bookstore
+      POSTGRES_DB: authdb # Database = bookstore
     ports: # 🌐 Expose the container's port to your machine
       - "5432:5432" # containerPort:hostPort
     volumes: # 💾 Persist data so DB isn't lost when restarting
       - pg_data:/var/lib/postgresql/data
+
+  auth:
+    build: .
+    container_name: grpc-auth
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:secret@postgres:5432/authdb?sslmode=disable
+    ports:
+      - "50051:50051"
 
 volumes: # 🔒 Declare volume to persist database storage
   pg_data:

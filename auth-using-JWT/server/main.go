@@ -5,16 +5,17 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/pradeep1402/golang-practice-projects/shared-proto/gen/auth"
 	"grpc-auth-jwt/internal/db"
 	"grpc-auth-jwt/internal/handlers"
 	repo "grpc-auth-jwt/internal/repository"
 	"grpc-auth-jwt/internal/services"
 
+	pb "github.com/pradeep1402/golang-practice-projects/shared-proto/gen/auth"
+
 	"google.golang.org/grpc"
 )
 
-const addr = "localhost:50052"
+const addr = ":50051"
 
 func main() {
 	lis, err := net.Listen("tcp", addr)
