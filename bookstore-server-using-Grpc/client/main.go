@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	url     = "localhost:50051"
-	authUrl = "localhost:50052"
+	url     = ":50052"
+	authUrl = ":50051"
 )
 
 type AuthServiceClient struct {

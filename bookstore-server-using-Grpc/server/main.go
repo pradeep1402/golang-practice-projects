@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	addr = "localhost:50051"
+	addr = ":50052"
 	key  = "secret-key"
 )
 

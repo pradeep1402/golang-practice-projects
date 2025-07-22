@@ -25,5 +25,18 @@ services: # 🧱 Services to run — each is like a mini computer
     ports:
       - "50051:50051"
 
+  bookstore:
+    build: ../bookstore-server-using-Grpc
+    container_name: bookstore-grpc-server
+    restart: always
+    depends_on:
+      - postgres
+      - auth
+    environment:
+      - DATABASE_URL=postgres://postgres:secret@postgres:5432/authdb?sslmode=disable
+      - AUTH_SERVICE_URL=grpc-auth:50051
+    ports:
+      - "50052:50052"
+
 volumes: # 🔒 Declare volume to persist database storage
   pg_data:
